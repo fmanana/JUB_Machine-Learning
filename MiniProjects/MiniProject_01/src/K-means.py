@@ -5,7 +5,7 @@ from collections import defaultdict
 import copy
 
 # load mfeat-pix dataset
-pixel_data = np.loadtxt('mfeat-pix.txt', dtype=np.uint)
+pixel_data = np.loadtxt('../DigitsBasicRoutines/mfeat-pix.txt', dtype=np.uint)
 
 m = 200 # number of training examples
 n = pixel_data.shape[1] # number of features, 240
@@ -32,7 +32,6 @@ for i in range(K):
 tempDist = np.zeros([K]).reshape(K, 1)
 # tempCluster stores previous cluster composition
 tempCluster = defaultdict(list)
-print("cl: ", tempCluster)
 # mat will contain the cluster numbers to reassign each vector
 mat = np.zeros([m]).reshape(m, 1)
 
@@ -40,6 +39,7 @@ mat = np.zeros([m]).reshape(m, 1)
 j = 0
 for run in range(no_iters): # number of runs of K means algorithm
     tempCluster = copy.deepcopy(clusters) # preserve previous cluster config
+    #print("tempCl: ", tempCluster)
     for key in clusters: # each cluster
         for index in range(len(clusters[key])): # the length of the cluster
             vector = clusters[key][index]
