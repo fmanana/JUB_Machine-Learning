@@ -7,14 +7,12 @@ import copy
 # load mfeat-pix dataset
 pixel_data = np.loadtxt('../DigitsBasicRoutines/mfeat-pix.txt', dtype=np.uint)
 
-m = 200 # number of training examples
+#[a, b) is the interval over which we obtain our training points (b exclusive)
+a = 200
+b = 400
+m = b - a # number of training examples
 n = pixel_data.shape[1] # number of features, 240
 K = 2 # set the number of clusters
-no_iters = 10 # the number of iterations to be performed by K-means
-
-#[a, b) is the interval over which we obtain our training points (b exclusive)
-a = 1400
-b = 1600
 
 clusters = defaultdict(list)
 # randomly assign training points to K sets over the 
@@ -42,11 +40,12 @@ tempDist = np.zeros([K]).reshape(K, 1)
 tempCluster = defaultdict(list)
 # mat will contain the cluster numbers to reassign each vector
 mat = np.zeros([m]).reshape(m, 1)
-
+tempMat = np.ones([m]).reshape(m, 1)
 # reassign training points to clusters according to distance from codebook vectors
 j = 0
 initialise_clusters()
-for run in range(no_iters): # number of runs of K means algorithm
+while not np.array_equal(tempMat, mat): # algorithm runs until the sets do not change
+    tempMat = copy.deepcopy(mat)
     # cacluate codebook vectors for each cluster
     cb_vectors = calculate_cb_vecs()
     # preserve cluster information
@@ -81,5 +80,5 @@ for run in range(no_iters): # number of runs of K means algorithm
 cb_vectors = calculate_cb_vecs()
 
 # draw codebook vector for specified cluster
-plt.imshow(cb_vectors[1,:].reshape(16,15))
+plt.imshow(cb_vectors[0,:].reshape(16,15))
 plt.show()
