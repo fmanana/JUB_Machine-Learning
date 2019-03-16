@@ -15,11 +15,35 @@ n = pixel_data.shape[1] # number of features, 240
 K = 2 # set the number of clusters
 
 clusters = defaultdict(list)
-# randomly assign training points to K sets over the 
-# params a, b: the interval over which to obtain the training points
-def initialise_clusters():
+# initialise clusters by alternating the bins to which the vectors are assigned
+def alternating_bins_initialisation():
     for i in range(a, b): # selecting sevens as data set
         clusters[i % K].append(pixel_data[i])
+
+# assign the first m/K vectors to the first cluster and so on
+def in_order_initialisation():
+    i = 0
+    for k in range(K):
+        while(len(clusters[k]) < m/K and i < m):
+            clusters[k].append(pixel_data[a + i])
+            i += 1
+
+# unevenly distributes vectors into clusters by placing offset number of vectors in the
+# the first cluster and evenly spreads the remaining vectors in the remaining clusters
+def unbalanced_initialisation(offset):
+    if(K > 1):
+        # the first offset vectors are put in the first cluster
+        for i in range(a, a + offset):
+            clusters[0].append(pixel_data[i])
+        # the remaining vectors are spread evenly in the remaining clusters
+        j = a + offset
+        for k in range(1, K):
+            while(len(clusters[k]) < (m - offset)/(K-1) and j < b):
+                clusters[k].append(pixel_data[j])
+                j += 1
+    else:
+        print("cannot have unbalanced initialisation with one cluster")
+
 
 def calculate_cb_vecs():
     # setup the codebook vectors
@@ -41,9 +65,10 @@ tempCluster = defaultdict(list)
 # mat will contain the cluster numbers to reassign each vector
 mat = np.zeros([m]).reshape(m, 1)
 tempMat = np.ones([m]).reshape(m, 1)
-# reassign training points to clusters according to distance from codebook vectors
+
 j = 0
-initialise_clusters()
+# initialise clusters
+alternating_bins_initialisation()
 while not np.array_equal(tempMat, mat): # algorithm runs until the sets do not change
     tempMat = copy.deepcopy(mat)
     # cacluate codebook vectors for each cluster
@@ -68,7 +93,7 @@ while not np.array_equal(tempMat, mat): # algorithm runs until the sets do not c
     # reset cluster information
     clusters.clear()
 
-    # reassign vectors to new clusters
+    # reassign training points to clusters according to distance from codebook vectors
     # Note: new clusters are allocated in order of membership occurrence
     while(j >= 1):
         for k in tempCluster:
