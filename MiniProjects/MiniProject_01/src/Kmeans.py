@@ -14,8 +14,8 @@ m = b - a
 """m is the size of the set of our training points"""
 n = pixel_data.shape[1]
 """n is the number of features"""
-K = 1
-"""K is the number of clusters. K=1 by default, can be changed"""
+K = 200
+"""K is the number of clusters. K=200 by default, can be changed"""
 
 clusters = defaultdict(list)
 # initialise clusters by alternating the bins to which the vectors are assigned
@@ -93,6 +93,8 @@ def main():
     j = 0
     # initialise clusters
     alternating_bins_initialisation()
+    # in_order_initialisation()
+    # unbalanced_initialisation(100)
     while not np.array_equal(tempMat, mat): # algorithm runs until the sets do not change
         tempMat = copy.deepcopy(mat)
         # cacluate codebook vectors for each cluster
@@ -127,7 +129,8 @@ def main():
     cb_vectors = calculate_cb_vecs()
 
     # draw codebook vector for specified cluster
-    plt.imshow(cb_vectors[0,:].reshape(16,15))
+    cluster_idx = rd.randint(0, K-1)
+    plt.imshow(cb_vectors[cluster_idx,:].reshape(16,15))
     plt.show()
 
 if __name__ == "__main__":

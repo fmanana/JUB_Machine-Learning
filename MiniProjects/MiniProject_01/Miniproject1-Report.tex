@@ -1,0 +1,183 @@
+\documentclass[a4paper, 11pt]{report}
+\usepackage[export]{adjustbox}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{9} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{9}  % for normal
+% Defining colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{auburn}{rgb}{0.43, 0.21, 0.1}
+
+\newcommand\pythonstyle{\lstset{
+  language=Python,
+  numbers=left,
+  backgroundcolor=\color{white}, %%%%%%%
+  basicstyle=\ttm,
+  otherkeywords={self},            
+  keywordstyle=\ttb\color{deepblue},
+  emph={MyClass,__init__},          
+  emphstyle=\ttb\color{deepred},    
+  stringstyle=\color{deepgreen},
+  commentstyle=\color{auburn},  %%%%%%%%
+  frame=tb,                         
+  showstringspaces=false            
+}}
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+\title{Mini Project 1}
+\author{Fezile Manana, Dushan Terzikj}
+\begin{document}
+\maketitle
+\tableofcontents
+\pagebreak
+
+\chapter{Overview}
+\section{Data Set}
+The data set is a matrix of size $2000 \times 240$ which encodes 2000 normalized handwritten digits, 0 - 9. The 240 features of the vector are the grayscale values, ranging from 0 - 6, of a $15 \times 16$ image panel of the digit. There are 200 samples for each digit ranging from 0 - 9.
+\section{Task Description}
+Pick one of the digits (e.g. the "ones"), which gives you a dataset of 200 image vectors. Carry out a K-means clustering on your chosen sample, setting      K = 1, 2, 3, and 200 in four runs of this algorithm. Generate visualizations of the images that are coded in the respective codebook vectors that you get (for the K = 200 case, only visualize a few). Discuss what you see. Your discussion should include (but not be restricted to) answers to the questions (1) what is the mathematical nature of the codebook image for the case K = 1? (2) what is the mathematical nature of the codebook images for the case K = 200? (give formulas).
+
+\section{Task Objectives}
+The goal of this project is to implement K-means clustering on the data set and analyse the effects of the number of initial clusters on the codebook vectors.
+
+\chapter{Procedure}
+\section{Methods}
+For the purpose of this project the data set of "ones" was chosen for analysis. There is no particular reason why the "ones" were chosen. The way we worked is that we initialized $K$ to 1, and then 2, 3 and 200. The results are analyzed below and the algorithm is explained below as well.
+\subsection{Algorithm Implementation - Initializations}
+\begin{python}[caption=Set up parameters]
+#[a, b) is the interval over which we obtain our training points
+a = 200
+b = 400
+m = b - a # number of training examples
+n = pixel_data.shape[1] # number of features, 240
+K = 1 # set the number of clusters
+\end{python}
+In Listing 2.1 we define the interval over which we will obtain our training points. The interval $[200, 400)$ defines the training points for the set of "ones". The independent variable $K$ is the number of clusters we wish to distinguish in the first run of the algorithm. As mentioned in section 2.1 the K is later changed to 2, then 3, and 200.\\
+
+\begin{python}[caption= Alternating cluster initialization]
+clusters = defaultdict(list)
+def alternating_bins_initialisation():
+    for i in range(a, b): # selecting sevens as data set
+        clusters[i \% K].append(pixel_data[i])
+\end{python}
+The method used for cluster initialisation is an alternating cluster assignment scheme, where each proceeding vector is assigned to neighbouring cluster above it.
+
+\begin{python}[caption=In order initialization]
+def in_order_initialisation():
+    i = 0
+    for k in range(K):
+        while(len(clusters[k]) < m/K and i < m):
+            clusters[k].append(pixel_data[a + i])
+            i += 1
+\end{python}
+In Listing 2.3 a different type of initialization is presented. This "in-order" type of initialization assigns the first $\frac{m}{K}$ vectors the to first cluster and then the second $\frac{m}{K}$ vectors (if they exists, i.e. if $K>1$) to the second cluster, and so on.
+
+\begin{python}[caption=Unbalanced initialization]
+def unbalanced_initialisation(offset):
+
+    """
+    :param offset: the first offset vectors are put in the first cluster  
+    :type offset: int
+    """
+
+    if(K > 1):
+        for i in range(a, a + offset):
+            clusters[0].append(pixel_data[i])
+        # the remaining vectors are spread evenly in the remaining clusters
+        j = a + offset
+        for k in range(1, K):
+            while(len(clusters[k]) < (m - offset)/(K-1) and j < b):
+                clusters[k].append(pixel_data[j])
+                j += 1
+    else:
+        print("cannot have unbalanced initialisation with one cluster")
+\end{python}
+In Listing 2.4 unbalanced initialization is presented. This type unevenly distributes vectors into clusters by placing $offset$ number of vectors in the first cluster and evenly spreads the remaining vectors in the remaining clusters. This type of initialization can only be used if $K>1$ for trivial reasons.\\ \\
+These initialization types are used when running the K-means algorithm on our chosen data set. Only alternating and in-order initialization will be discussed in this paper. If you want to see the effects of unbalanced initialization, please use our source code.
+\subsection{Algorithm Implementation - Codebook Vectors}
+\begin{python}[caption=Calculate Codebook Vectors]
+def calculate_cb_vecs():
+    # setup the codebook vectors
+    cb_vectors = np.zeros([n * K]).reshape(K, n)
+    # calculate codebook vectors
+    for i in range(K):
+        sum = np.zeros([n], dtype=np.uint).reshape(1, n)
+        for vector in clusters[i]:
+            sum += vector
+        # divide the sum of the vectors by the size of the cluster
+        cb_vectors[i] = np.divide(sum, len(clusters[i]))
+return cb_vectors
+\end{python}
+The function \textit{calculate\_cb\_vecs()} in Listing 2.5 returns a $K \times n$ matrix where $K$ is the number of clusters and $n$ is the feature length of the vectors.\\\\
+The general formula for computing the codebook vectors takes the form:
+$$\mu_j = {\vert S_j \vert}^{-1} \sum_{x \in S_j}x$$
+where $S_j$ is a cluster in the set of $K$ clusters $(j = 1, ..., K)$. For $K=1$, $\mu_j$ is the average vector of the entire data set. However, for values of $K$ greater than 1, K-means will produce codebook vectors for the average of $K$ distinctive sets.\\\\
+For brevity the algorithm for carrying out the K-means is omitted from this report (find attached python file).
+
+\section{Results}
+\subsection{K=1}
+For $K = 1$, K-means returns the average vector for all the ones (i.e. what a "one" looks like on average). All types of initialization look the same in this case. Figure 2.1 illustrates the codebook vector for $K = 1$ plotted on a $15 \times 16$ grid.
+\begin{figure}[!ht]
+    \includegraphics[width=1\textwidth,left]{Figure_1.png}
+    \caption{Codebook vector when K=1}
+\end{figure}
+
+\subsection{K=2}
+There is not much improvement in distinguishing differently written 1s when $K=2$ (check figures 2.2 to 2.5). You can see that using alternating initialization (figures 2.2 and 2.3) can give us better perspective to distinguish different written 1s. The algorithm here iteratively computes 2 centres, since we have 2 clusters. They approach convergence, but there is still a lot of noise. The in-order samples (figures 2.4 and 2.5) look very similar because our training points are ordered in a way that similar vectors precede and succeed each other. Due the the initialization approach in Listing 2.3 the means are very similar.
+\begin{figure}[!ht]
+    \includegraphics[width=1\textwidth,left]{altk2v0.png}
+    \caption{First codebook vector when K=2, using alternating initialization}
+    \includegraphics[width=1\textwidth,left]{altk2v1.png}
+    \caption{Second codebook vector when K=2, using alternating initialization}
+\end{figure}
+\begin{figure}[!ht]
+    \includegraphics[width=1\textwidth,left]{inordk2v0.png}
+    \caption{First codebook vector when K=2, using in-order initialization}
+    \includegraphics[width=1\textwidth,left]{inordk2v1.png}
+    \caption{Second codebook vector when K=2, using in-order initialization}
+\end{figure}
+
+\subsection{K=3}
+Comparing figures 2.6 and 2.7 with 2.2 and 2.3 respectively, we can clearly see how the plots become more "sharp". The reason for this is because we have 3 clusters instead of 2, i.e., the convergence can be spotted more clearly. Very similar argument can be given regarding in-order initialization as it was given in section 2.2.2. In other words, the approach of initializing the clusters makes the means of both codebook vectors very similar.
+\begin{figure}[!ht]
+    \includegraphics[width=1\textwidth,left]{altk3v0.png}
+    \caption{First codebook vector when K=3, using alternating initialization}
+    \includegraphics[width=1\textwidth,left]{altk3v1.png}
+    \caption{Second codebook vector when K=3, using alternating initialization}
+\end{figure}
+\begin{figure}[!ht]
+    \includegraphics[width=1\textwidth,left]{inordk3v0.png}
+    \caption{First codebook vector when K=3, using in-order initialization}
+    \includegraphics[width=1\textwidth,left]{inordk3v1.png}
+    \caption{Second codebook vector when K=3, using in-order initialization}
+\end{figure}
+
+\subsection{K=200}
+In this case the plots of the codebook vectors become very "sharp" (figures 2.10 and 2.11). Since we only have 200 training points for the 1s, one codebook vector is calculated for each training point. In this case, initializing the clusters with altering or in-order initializtion does not make a difference, because when $K=200$ both algorithms yield the same result. 
+\begin{figure}[!ht]
+    \includegraphics[width=1\textwidth,left]{altk200.png}
+    \caption{Random codebook vector when K=200, using alternating initialization}
+    \includegraphics[width=1\textwidth,left]{inordk200.png}
+    \caption{Random codebook vector when K=200, using in-order initialization}
+\end{figure}
+
+\chapter{Summary}
+\section{Conclusion}
+This paper is just a glimpse of what is happening with the clusters when $K$ and the initialization algorithms vary. Our training points set contains different type of handwritten 1s and when one tries to cluster those training points into more clusters, the more means of different types are yielded. In other words, as $K$ approaches the size of the training set, we can see more clear categorization of 1s.\\ \\
+Additionally, different types of initialization in this case yield different clusters. The reason for this is that our training set is not that big (only 200). In the first three cases where $K<<200$ we can see different clusters for different initialization. But once $K=200$, categorization of these 1s becomes more clear and clusters do not differ depending on the type of initialization. 
+
+\end{document}
