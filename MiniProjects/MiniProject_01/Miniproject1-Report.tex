@@ -1,6 +1,7 @@
 \documentclass[a4paper, 11pt]{report}
 \usepackage[export]{adjustbox}
 \usepackage{listings}
+\usepackage{float}
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
 \DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{9} % for bold
@@ -131,20 +132,20 @@ For brevity the algorithm for carrying out the K-means is omitted from this repo
 \section{Results}
 \subsection{K=1}
 For $K = 1$, K-means returns the average vector for all the ones (i.e. what a "one" looks like on average). All types of initialization look the same in this case. Figure 2.1 illustrates the codebook vector for $K = 1$ plotted on a $15 \times 16$ grid.
-\begin{figure}[!ht]
+\begin{figure}[H]
     \includegraphics[width=1\textwidth,left]{Figure_1.png}
     \caption{Codebook vector when K=1}
 \end{figure}
 
 \subsection{K=2}
 There is not much improvement in distinguishing differently written 1s when $K=2$ (check figures 2.2 to 2.5). You can see that using alternating initialization (figures 2.2 and 2.3) can give us better perspective to distinguish different written 1s. The algorithm here iteratively computes 2 centres, since we have 2 clusters. They approach convergence, but there is still a lot of noise. The in-order samples (figures 2.4 and 2.5) look very similar because our training points are ordered in a way that similar vectors precede and succeed each other. Due the the initialization approach in Listing 2.3 the means are very similar.
-\begin{figure}[!ht]
+\begin{figure}[H]
     \includegraphics[width=1\textwidth,left]{altk2v0.png}
     \caption{First codebook vector when K=2, using alternating initialization}
     \includegraphics[width=1\textwidth,left]{altk2v1.png}
     \caption{Second codebook vector when K=2, using alternating initialization}
 \end{figure}
-\begin{figure}[!ht]
+\begin{figure}[H]
     \includegraphics[width=1\textwidth,left]{inordk2v0.png}
     \caption{First codebook vector when K=2, using in-order initialization}
     \includegraphics[width=1\textwidth,left]{inordk2v1.png}
@@ -153,13 +154,13 @@ There is not much improvement in distinguishing differently written 1s when $K=2
 
 \subsection{K=3}
 Comparing figures 2.6 and 2.7 with 2.2 and 2.3 respectively, we can clearly see how the plots become more "sharp". The reason for this is because we have 3 clusters instead of 2, i.e., the convergence can be spotted more clearly. Very similar argument can be given regarding in-order initialization as it was given in section 2.2.2. In other words, the approach of initializing the clusters makes the means of both codebook vectors very similar.
-\begin{figure}[!ht]
+\begin{figure}[H]
     \includegraphics[width=1\textwidth,left]{altk3v0.png}
     \caption{First codebook vector when K=3, using alternating initialization}
     \includegraphics[width=1\textwidth,left]{altk3v1.png}
     \caption{Second codebook vector when K=3, using alternating initialization}
 \end{figure}
-\begin{figure}[!ht]
+\begin{figure}[H]
     \includegraphics[width=1\textwidth,left]{inordk3v0.png}
     \caption{First codebook vector when K=3, using in-order initialization}
     \includegraphics[width=1\textwidth,left]{inordk3v1.png}
@@ -168,7 +169,7 @@ Comparing figures 2.6 and 2.7 with 2.2 and 2.3 respectively, we can clearly see 
 
 \subsection{K=200}
 In this case the plots of the codebook vectors become very "sharp" (figures 2.10 and 2.11). Since we only have 200 training points for the 1s, one codebook vector is calculated for each training point. In this case, initializing the clusters with altering or in-order initializtion does not make a difference, because when $K=200$ both algorithms yield the same result. 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \includegraphics[width=1\textwidth,left]{altk200.png}
     \caption{Random codebook vector when K=200, using alternating initialization}
     \includegraphics[width=1\textwidth,left]{inordk200.png}
