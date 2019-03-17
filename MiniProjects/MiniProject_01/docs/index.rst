@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to K-means Clustering - ML homework 1's documentation!
-==============================================================
+Welcome to K-means Clustering - ML Miniproject 1 documentation!
+===============================================================
 
 This is an introduction to our project.
 
