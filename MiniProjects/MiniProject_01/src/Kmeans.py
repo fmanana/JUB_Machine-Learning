@@ -76,11 +76,15 @@ def main():
     """K-means clustering algorithm"""
 
     global K
-    tmp_K = int(input("Enter K: "))
-    if tmp_K in [1, 2, 3, 200]:
-        K = tmp_K
-    else:
-        print("Invalid value: running K=1")
+    
+    try:
+        tmp_K = int(input("Enter K (default K=200): "))
+        if tmp_K in [1, 2, 3, 200]:
+            K = tmp_K
+        else:
+            raise ValueError
+    except ValueError:
+        print("Invalid value: running K=200")
 
     # tempDist stores distance between training points and codebook vectors
     tempDist = np.zeros([K]).reshape(K, 1)
@@ -93,8 +97,6 @@ def main():
     j = 0
     # initialise clusters
     alternating_bins_initialisation()
-    # in_order_initialisation()
-    # unbalanced_initialisation(100)
     while not np.array_equal(tempMat, mat): # algorithm runs until the sets do not change
         tempMat = copy.deepcopy(mat)
         # cacluate codebook vectors for each cluster
