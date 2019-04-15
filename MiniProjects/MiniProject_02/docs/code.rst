@@ -1,5 +1,5 @@
 Auto Generated Documentations using Docstrings
 ==============================================
 
-.. automodule:: Kmeans
+.. automodule:: k_means
    :members:

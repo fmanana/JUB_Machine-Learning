@@ -39,43 +39,80 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-Kmeans">
-<span id="auto-generated-documentations-using-docstrings"></span><h1>Auto Generated Documentations using Docstrings<a class="headerlink" href="#module-Kmeans" title="Permalink to this headline">¶</a></h1>
-<dl class="data">
-<dt id="Kmeans.K">
-<code class="descclassname">Kmeans.</code><code class="descname">K</code><em class="property"> = 200</em><a class="headerlink" href="#Kmeans.K" title="Permalink to this definition">¶</a></dt>
-<dd><p>K is the number of clusters. K=200 by default, can be changed</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Kmeans.alternating_bins_initialisation">
-<code class="descclassname">Kmeans.</code><code class="descname">alternating_bins_initialisation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Kmeans.html#alternating_bins_initialisation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Kmeans.alternating_bins_initialisation" title="Permalink to this definition">¶</a></dt>
+  <div class="section" id="module-k_means">
+<span id="auto-generated-documentations-using-docstrings"></span><h1>Auto Generated Documentations using Docstrings<a class="headerlink" href="#module-k_means" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="k_means.KMeans">
+<em class="property">class </em><code class="descclassname">k_means.</code><code class="descname">KMeans</code><span class="sig-paren">(</span><em>K</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/k_means.html#KMeans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#k_means.KMeans" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class which encapsulates several functionalities which provide the 
+K-Means clustering algorithm.</p>
+<dl class="method">
+<dt id="k_means.KMeans.alternating_bins_initialisation">
+<code class="descname">alternating_bins_initialisation</code><span class="sig-paren">(</span><em>pixel_data</em>, <em>a=None</em>, <em>b=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/k_means.html#KMeans.alternating_bins_initialisation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#k_means.KMeans.alternating_bins_initialisation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise clusters by alternating the bins to which the 
-vectors are assigned</p>
+vectors are assigned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pixel_data</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>int</em><em>]</em><em>]</em>) – The data that is divded into clusters.</li>
+<li><strong>a</strong> (<em>int</em>) – The lower bound of the interval in the pixel_data. If its set to None, then the value is 0.</li>
+<li><strong>b</strong> (<em>int</em>) – The upper bound of the interval in pixel_data. If is None then it is set to the length of pixel_data.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">defaultdict</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="function">
-<dt id="Kmeans.calculate_cb_vecs">
-<code class="descclassname">Kmeans.</code><code class="descname">calculate_cb_vecs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Kmeans.html#calculate_cb_vecs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Kmeans.calculate_cb_vecs" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="k_means.KMeans.calculate_cb_vecs">
+<code class="descname">calculate_cb_vecs</code><span class="sig-paren">(</span><em>clusters</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/k_means.html#KMeans.calculate_cb_vecs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#k_means.KMeans.calculate_cb_vecs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setup and calculate codebook vectors</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>clusters</strong> (<em>defaultdict</em>) – The clusters in which the codebook vectors are calculated.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array(array(int))</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="data">
-<dt id="Kmeans.m">
-<code class="descclassname">Kmeans.</code><code class="descname">m</code><em class="property"> = 200</em><a class="headerlink" href="#Kmeans.m" title="Permalink to this definition">¶</a></dt>
-<dd><p>m is the size of the set of our training points</p>
+<dl class="method">
+<dt id="k_means.KMeans.fix">
+<code class="descname">fix</code><span class="sig-paren">(</span><em>pixel_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/k_means.html#KMeans.fix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#k_means.KMeans.fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the K-means algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pixel_data</strong> (<em>array</em><em>(</em><em>array</em><em>(</em><em>int</em><em>)</em><em>)</em>) – A set of vectors of the data which is clustered.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="function">
-<dt id="Kmeans.main">
-<code class="descclassname">Kmeans.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Kmeans.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Kmeans.main" title="Permalink to this definition">¶</a></dt>
-<dd><p>K-means clustering algorithm</p>
+<dl class="method">
+<dt id="k_means.KMeans.get_cb_vectors">
+<code class="descname">get_cb_vectors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/k_means.html#KMeans.get_cb_vectors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#k_means.KMeans.get_cb_vectors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the codebook vectors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">array(array(int))</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="data">
-<dt id="Kmeans.n">
-<code class="descclassname">Kmeans.</code><code class="descname">n</code><em class="property"> = 240</em><a class="headerlink" href="#Kmeans.n" title="Permalink to this definition">¶</a></dt>
-<dd><p>n is the number of features</p>
 </dd></dl>
 
 </div>
