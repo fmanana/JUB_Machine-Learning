@@ -1,3 +1,6 @@
+# import matplotlib.pyplot as plt
+# import numpy as np
+# from k_means import KMeans
 import matplotlib.pyplot as plt
 import numpy as np
 from k_means import KMeans
@@ -34,7 +37,8 @@ for i in range(0, len(pixel_data), 200):
 K = 10
 km = KMeans(K)
 print("Doing K-means clustering with K={}".format(K))
-cb_vectors = km.fix(pixel_data)
+cb_vectors = km.fix(training_data)
 print("Done!")
-tryout(cb_vectors)
+# tryout(cb_vectors)
+km.extract_features(training_data)
 

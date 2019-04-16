@@ -131,3 +131,24 @@ class KMeans:
         :rtype: array(array(int))
         """
         return self.cb_vectors
+
+    def extract_features(self, data):
+
+        """
+        Extracts features from the final codebook vectors using the L2 norm. The way it works
+        is that we pass in the data as an argument and the function produces len(data) feature
+        vectors such that f(x_i)=[a_1 ... a_K] and a_j = || x_i - c_j || where c_j is the
+        codebook vector.
+
+        :param data: The data that is used to extract features from.
+        :type data: list[list[float]]
+        """
+
+        # TODO: Should feature extraction be done on the testing data? In the lecture notes
+        # TODO: it is not done with the training data, but with the test data.
+        # TODO: Maybe we should use the validate data when we do cross-validation.
+
+        features = np.zeros([len(data)*self.K]).reshape(len(data), self.K)
+        for i in range(len(data)):
+            for j in range(self.K):
+                features[i][j] = np.linalg.norm(data[i] - self.cb_vectors[j])
