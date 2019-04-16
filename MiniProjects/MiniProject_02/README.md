@@ -17,3 +17,9 @@ You can find our code's documentation in docs/_build/html/index.html.
 WRITE ONCE DONE
 
 ### References and tools
+- Matplotlib
+- Numpy
+- Python3
+- Data set (http://minds.jacobs-university.de/sites/default/files/uploads/teaching/share/DigitsBasicRoutines.zip)
+- Project assignment (http://minds.jacobs-university.de/uploads/teaching/MLSpring2019/Miniproject2_MLSpring2019.pdf)
+- Literature (http://minds.jacobs-university.de/uploads/teaching/lectureNotes/LN_ML4IMS.pdf)

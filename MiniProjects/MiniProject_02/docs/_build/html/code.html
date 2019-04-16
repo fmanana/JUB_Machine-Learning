@@ -86,6 +86,25 @@ vectors are assigned.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="k_means.KMeans.extract_features">
+<code class="descname">extract_features</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/k_means.html#KMeans.extract_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#k_means.KMeans.extract_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts features from the final codebook vectors using the L2 norm. The way it works
+is that we pass in the data as an argument and the function produces len(data) feature
+vectors such that f(x_i)=[a_1 … a_K] and a_j = || x_i - c_j || where c_j is the
+codebook vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em>) – The data that is used to extract features from.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list[list[float]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="k_means.KMeans.fix">
 <code class="descname">fix</code><span class="sig-paren">(</span><em>pixel_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/k_means.html#KMeans.fix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#k_means.KMeans.fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs the K-means algorithm.</p>

@@ -171,7 +171,31 @@
 
 <span class="sd">        :rtype: array(array(int))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cb_vectors</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cb_vectors</span></div>
+
+<div class="viewcode-block" id="KMeans.extract_features"><a class="viewcode-back" href="../code.html#k_means.KMeans.extract_features">[docs]</a>    <span class="k">def</span> <span class="nf">extract_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts features from the final codebook vectors using the L2 norm. The way it works</span>
+<span class="sd">        is that we pass in the data as an argument and the function produces len(data) feature</span>
+<span class="sd">        vectors such that f(x_i)=[a_1 ... a_K] and a_j = || x_i - c_j || where c_j is the</span>
+<span class="sd">        codebook vector.</span>
+
+<span class="sd">        :param data: The data that is used to extract features from.</span>
+<span class="sd">        :type data: list[list[float]]</span>
+<span class="sd">        :rtype: list[list[float]]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># TODO: Should feature extraction be done on the testing data? In the lecture notes</span>
+        <span class="c1"># TODO: it is not done with the training data, but with the test data.</span>
+        <span class="c1"># TODO: Maybe we should use the validate data when we do cross-validation.</span>
+
+        <span class="n">features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">K</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">K</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">K</span><span class="p">):</span>
+                <span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cb_vectors</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">features</span></div></div>
 </pre></div>
 
           </div>

@@ -142,6 +142,7 @@ class KMeans:
 
         :param data: The data that is used to extract features from.
         :type data: list[list[float]]
+        :rtype: list[list[float]]
         """
 
         # TODO: Should feature extraction be done on the testing data? In the lecture notes
@@ -152,3 +153,5 @@ class KMeans:
         for i in range(len(data)):
             for j in range(self.K):
                 features[i][j] = np.linalg.norm(data[i] - self.cb_vectors[j])
+
+        return features
