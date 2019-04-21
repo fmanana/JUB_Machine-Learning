@@ -77,4 +77,4 @@ if __name__ == "__main__":
     # load mfeat-pix dataset
     pixel_data = np.loadtxt('../DigitsBasicRoutines/mfeat-pix.txt', dtype=np.uint)
     pca = pca(2, pixel_data)
-    print(pca.getFeatures())
+    print(pca.fit())
