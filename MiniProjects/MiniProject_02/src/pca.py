@@ -1,9 +1,7 @@
 import numpy as np
+from copy import deepcopy
 import matplotlib.pyplot as plt
 from collections import defaultdict
-
-# load mfeat-pix dataset
-pixel_data = np.loadtxt('../DigitsBasicRoutines/mfeat-pix.txt', dtype=np.uint)
 
 class pca:
     """
@@ -13,6 +11,9 @@ class pca:
     def __init__(self, m, data):
         self.m = m
         self.data = data
+        self.N = data.shape[0]
+        self.centeredData = None
+        self.features = None
     
     """ computes the mean of the cloud data """
     def __mean(self):
@@ -32,13 +33,15 @@ class pca:
         for i in range(len(self.data)):
             centeredData[i] = (self.data[i] - mean)
 
+        centeredData = np.transpose(centeredData)
+        self.centeredData = centeredData
         return centeredData
 
     def __cov(self):
         data = self.__centerData()
-        n = len(self.data)
+        N = len(self.data)
 
-        covariance = np.dot(data, np.transpose(data)) / n
+        covariance = np.dot(data, np.transpose(data)) / N
 
         return covariance
 
@@ -49,18 +52,22 @@ class pca:
         return u, s, vh
 
     def getFeatures(self):
+        return self.features
+
+    def fit(self):
         u, s, vh = self.svd()
 
-        features = np.zeros(len(u) * self.m).reshape(len(u), self.m)
-        for i in range(self.m):
-            for j in range(len(u)):
-                features[j][i] = u[j][i]
+        um = u[:, :self.m]
+        features = np.zeros([self.m * self.N]).reshape(self.m, self.N)
+        for i in range(self.N):
+            features[:, i:i + 1] = np.dot(np.transpose(um), self.centeredData[:, i:i + 1])
+
+        self.features = deepcopy(features)
 
         return features
 
-        
-
-pca = pca(2, pixel_data)
-
 if __name__ == "__main__":
+    # load mfeat-pix dataset
+    pixel_data = np.loadtxt('../DigitsBasicRoutines/mfeat-pix.txt', dtype=np.uint)
+    pca = pca(2, pixel_data)
     print(pca.getFeatures())

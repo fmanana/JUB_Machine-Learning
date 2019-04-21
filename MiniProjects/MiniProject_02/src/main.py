@@ -44,3 +44,6 @@ test_data = np.zeros([1000*n]).reshape(1000, n)
 init()
 
 # TODO: Write the cross validation here
+pca = pca(3, train_data)
+features = pca.fit()
+
