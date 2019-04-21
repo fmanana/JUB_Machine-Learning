@@ -42,14 +42,15 @@ class pca:
 
         return covariance
 
-    def svd(self):
+    def __svd(self):
         cov = self.__cov()
         u, s, vh = np.linalg.svd(cov)
 
         return u, s, vh
 
+    """ returns the PCA componenents colomn wise """
     def getFeatures(self):
-        u, s, vh = self.svd()
+        u, s, vh = self.__svd()
 
         features = np.zeros(len(u) * self.m).reshape(len(u), self.m)
         for i in range(self.m):
@@ -57,10 +58,3 @@ class pca:
                 features[j][i] = u[j][i]
 
         return features
-
-        
-
-pca = pca(2, pixel_data)
-
-if __name__ == "__main__":
-    print(pca.getFeatures())
