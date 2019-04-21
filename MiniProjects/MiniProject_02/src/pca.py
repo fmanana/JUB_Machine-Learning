@@ -34,7 +34,7 @@ class pca:
 
         return centeredData
 
-    def cov(self):
+    def __cov(self):
         data = self.__centerData()
         n = len(self.data)
 
@@ -43,13 +43,24 @@ class pca:
         return covariance
 
     def svd(self):
-        cov = self.cov()
+        cov = self.__cov()
         u, s, vh = np.linalg.svd(cov)
-        
+
         return u, s, vh
+
+    def getFeatures(self):
+        u, s, vh = self.svd()
+
+        features = np.zeros(len(u) * self.m).reshape(len(u), self.m)
+        for i in range(self.m):
+            for j in range(len(u)):
+                features[j][i] = u[j][i]
+
+        return features
+
         
 
-pca = pca(10, pixel_data)
+pca = pca(2, pixel_data)
 
 if __name__ == "__main__":
-    print(pca.svd())
+    print(pca.getFeatures())
