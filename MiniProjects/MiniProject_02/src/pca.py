@@ -3,22 +3,25 @@ from copy import deepcopy
 import matplotlib.pyplot as plt
 from collections import defaultdict
 
+
 class pca:
     """
     :param m: the number of principle components we wish to obtain
     :param data: the original data set
     """
+
     def __init__(self, m, data):
         self.m = m
         self.data = data
         self.N = data.shape[0]
         self.centeredData = None
         self.features = None
-    
+
     """ computes the mean of the cloud data """
+
     def __mean(self):
         counter = 0
-        mean = np.zeros([len(self.data[0])]).reshape(len(self.data[0]),)
+        mean = np.zeros([len(self.data[0])]).reshape(len(self.data[0]), )
         for point in self.data:
             mean += point
             counter += 1
@@ -26,9 +29,12 @@ class pca:
         return mean
 
     """ returns a list object with the centered data cloud """
+
     def __centerData(self):
         mean = self.__mean()
-        centeredData = np.zeros([len(self.data) * len(self.data[0])]).reshape(len(self.data), len(self.data[0]))
+        centeredData = np.zeros([len(self.data) * len(self.data[0])]).reshape(len(self.data),
+                                                                              len(self.data[
+                                                                                      0]))
 
         for i in range(len(self.data)):
             centeredData[i] = (self.data[i] - mean)
@@ -65,6 +71,7 @@ class pca:
         self.features = deepcopy(features)
 
         return features
+
 
 if __name__ == "__main__":
     # load mfeat-pix dataset
