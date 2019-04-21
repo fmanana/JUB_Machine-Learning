@@ -1,21 +1,7 @@
-# import matplotlib.pyplot as plt
-# import numpy as np
-# from k_means import KMeans
 import matplotlib.pyplot as plt
 import numpy as np
-from k_means import KMeans
-
-def tryout(cb_vectors):
-    """ Just for checking the codebook vectors, ignore this function. """
-    while True:
-        cluster_idx = input("Input a number: ")
-        if not cluster_idx:
-            break
-        cluster_idx = int(cluster_idx)
-        if cluster_idx < 0 or cluster_idx >= 10:
-            break
-        plt.imshow(cb_vectors[cluster_idx,:].reshape(16,15))
-        plt.show()
+from copy import deepcopy
+from pca import pca
 
 
 def init():
@@ -24,21 +10,22 @@ def init():
     Divide the data into training and testing data. Initialize z_i indicator vectors for each
     feature vectors (feature vectors are extracted later in the code) """
 
-    global pixel_data, training_data, test_data
+    global pixel_data, train_data, test_data
 
     # Divide the test and training data into separate sets
+    train_data_idx = 0
+    test_data_idx = 0
     for i in range(0, len(pixel_data), 200):
         for j in range(i, i + 100):
-            training_data.append(pixel_data[j])
+            train_data[train_data_idx] = deepcopy(pixel_data[j])
+            train_data_idx += 1
         for j in range(i + 100, i + 200):
-            test_data.append(pixel_data[j])
+            test_data[test_data_idx] = deepcopy(pixel_data[j])
+            test_data_idx += 1
 
-    # TODO: Structure the code
-    # TODO: Create target vectors z_i
-
-    z = np.zeros(len(training_data)*10).reshape(len(training_data), 10)
+    z = np.zeros(len(train_data)*10).reshape(len(train_data), 10)
     class_num = 0
-    for i in range(0, len(training_data), 100):
+    for i in range(0, len(train_data), 100):
         for j in range(i, i+100):
             z[j][class_num] = 1
         class_num += 1
@@ -49,15 +36,11 @@ print("Loading pixel data from file...")
 pixel_data = np.loadtxt('../DigitsBasicRoutines/mfeat-pix.txt', dtype=np.uint)
 print("Done!")
 
-training_data = []
-test_data = []
-K = 10
+n = pixel_data.shape[1]
+
+train_data = np.zeros([1000*n]).reshape(1000, n)
+test_data = np.zeros([1000*n]).reshape(1000, n)
 
 init()
 
-km = KMeans(K)
-print("Doing K-means clustering with K={}".format(K))
-cb_vectors = km.fix(training_data)
-print("Done!")
-# tryout(cb_vectors)
-features = km.extract_features(training_data)
+# TODO: Write the cross validation here
